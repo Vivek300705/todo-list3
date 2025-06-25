@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import API from "../api/axios";
+import axios from "axios";
 import { useNavigate, Link } from "react-router-dom"; // Import Link
 
 function Signup() {
@@ -24,16 +24,19 @@ function Signup() {
     setSuccess("");
 
     try {
-      const response = await API.post(
-        "/signup",
+      const response = await axios.post(
+        `http://localhost:8000/api/signup`,
         {
           username: formData.fullname, // Map fullname to username
           email: formData.email,
           password: formData.password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         setSuccess("Account created successfully! Redirecting to log in...");
         setTimeout(() => {
           navigate("/signin"); // Redirect to sign-in page

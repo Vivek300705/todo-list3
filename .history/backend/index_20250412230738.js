@@ -9,17 +9,13 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 
-// CORS Configuration
-const corsOptions = {
-  origin: 'http://localhost:3000', // Frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
 // Middleware
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000", 
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Basic route for API
@@ -41,7 +37,7 @@ mongoose
   });
 
 // Start the server
-const PORT = 5000; // Hardcoded to 5000
+const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 }).on('error', (err) => {

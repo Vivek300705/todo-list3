@@ -31,7 +31,7 @@ export const updateTodo = asyncHandler(async (req, res) => {
   const updatedTodo = await Todo.findOneAndUpdate(
     { _id: todoId, user: req.user.userId }, 
     { heading, text },
-    { new: true } 
+    { new: true } // Return the updated document
   );
 
   if (!updatedTodo) {

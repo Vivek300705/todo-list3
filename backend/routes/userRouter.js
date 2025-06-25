@@ -1,23 +1,33 @@
 // Import express and controller
 import express from 'express';
-import { registerUser, loginUser, logoutUser, profile,refreshAccessToken} from '../controllers/userControllers.js'; // Include .js if using ES Modules
-import verifyJWT from '../middlerware/auth.midddleware.js';  // Corrected typo: 'middleware.js'
+import { 
+  registerUser, 
+  loginUser, 
+  logoutUser, 
+  profile, 
+  refreshAccessToken,
+  updateProfile,
+  changePassword
+} from '../controllers/userControllers.js'; 
+import verifyJWT from '../middlerware/auth.midddleware.js';  
 
 // Create a Router instance
 const router = express.Router();
 
-// Define the POST route for user registration
-router.post("/signup", registerUser);
+// Authentication routes
+router.post("/register", registerUser);           // POST /api/register
+router.post("/login", loginUser);                 // POST /api/login  
+router.post("/logout", logoutUser);               // POST /api/logout
+router.post("/refresh-token", refreshAccessToken); // POST /api/refresh-token
 
-// Login route (POST)
-router.route("/signin").post(loginUser);
+// Protected routes (require authentication)
+router.get("/profile", verifyJWT, profile);                    // GET /api/profile
+router.put("/profile", verifyJWT, updateProfile);              // PUT /api/profile  
+router.put("/change-password", verifyJWT, changePassword);     // PUT /api/change-password
 
-// Logout route (POST)
-router.route("/logout").post(logoutUser);
-
-// Profile route (GET) - Protected by verifyJWT middleware
-router.route("/profile").get(verifyJWT, profile);
-router.post("/refresh-token", refreshAccessToken);
+// Alternative routes for backward compatibility (if needed)
+router.post("/signup", registerUser);            // POST /api/signup (alias for register)
+router.post("/signin", loginUser);               // POST /api/signin (alias for login)
 
 // Export the router
 export default router;

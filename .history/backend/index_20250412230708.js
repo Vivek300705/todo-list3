@@ -9,17 +9,13 @@ dotenv.config(); // Load environment variables
 
 const app = express();
 
-// CORS Configuration
-const corsOptions = {
-  origin: 'http://localhost:3000', // Frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
 // Middleware
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000", 
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Basic route for API
@@ -41,25 +37,9 @@ mongoose
   });
 
 // Start the server
-const PORT = 5000; // Hardcoded to 5000
-const server = app.listen(PORT, () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}).on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use. Please try a different port.`);
-    process.exit(1);
-  } else {
-    console.error('Server error:', err);
-    process.exit(1);
-  }
-});
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
-  server.close(() => {
-    process.exit(1);
-  });
 });
 
 // Error Handling Middleware

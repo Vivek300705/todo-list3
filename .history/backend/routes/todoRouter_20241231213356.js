@@ -9,7 +9,7 @@ import verifyJWT from "../middlerware/auth.midddleware.js";
 
 const todorouter = express.Router();
 
-todorouter.use(verifyJWT); 
+todorouter.use(verifyJWT); // Apply middleware to all routes below
 
 // Create a new todo task
 todorouter.route("/todo").post(addTask);

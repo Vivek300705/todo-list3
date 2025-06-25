@@ -4,7 +4,7 @@ const todoSchema = new mongoose.Schema(
   {
     heading: {
       type: String,
-      required: true, 
+      required: true, // Fixed typo `require` -> `required`
     },
     text: {
       type: String,

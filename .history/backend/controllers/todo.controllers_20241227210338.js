@@ -29,9 +29,9 @@ export const updateTodo = asyncHandler(async (req, res) => {
 
   // Update the todo and return the new document in one step
   const updatedTodo = await Todo.findOneAndUpdate(
-    { _id: todoId, user: req.user.userId }, 
+    { _id: todoId, user: req.user.userId }, // Ensure user owns the task
     { heading, text },
-    { new: true } 
+    { new: true } // Return the updated document
   );
 
   if (!updatedTodo) {
